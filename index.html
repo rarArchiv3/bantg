@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web</title>
+    <link rel="icon" href="icon.png" type="image/png"> <!-- Добавляем иконку сайта -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0); /* начальный цвет фона */
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Убираем прокрутку */
+            transition: background-color 0.075s ease-out; /* Плавное исчезновение фона */
+        }
+        .popup {
+            width: 300px;
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: left;
+            opacity: 0; /* Начальная непрозрачность 0 */
+            transition: opacity 0.075s ease-out; /* Плавный переход для появления и скрытия */
+            display: none; /* Скрываем элемент изначально */
+        }
+        .popup h2 {
+            margin-top: 2px;
+            margin-bottom: -5px;
+            font-size: 1.3rem;
+        }
+        .popup p {
+            color: #222222;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+        }
+        .button {
+            position: relative;
+            background-color: transparent;
+            border: none;
+            color: #4991CC;
+            font-size: 0.9rem;
+            cursor: pointer;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent; /* Убирает выделение при нажатии */
+        }
+        .button:focus {
+            outline: none;
+        }
+        .button.help {
+            text-align: left;
+            margin-left: -9px;
+        }
+        .button.ok {
+            text-align: right;
+        }
+
+        /* Анимация нажатия */
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: #F1F6FC;
+            transition: width 1s ease-out, height 1s ease-out, border-radius 1s ease-out;
+            border-radius: 50%; /* Закругление по умолчанию */
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            pointer-events: none; /* Исключаем из событий клика */
+        }
+
+        .button:active::before {
+            width: 600%; /* Увеличенный размер заполнения */
+            height: 600%;
+            border-radius: 30%; /* Увеличенное закругление краев */
+        }
+
+        .button strong {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Убираем стандартное изменение цвета кнопки при нажатии */
+        .button:active {
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup" id="popup">
+        <h2>Telegram</h2>
+        <p>Номер телефона заблокирован</p>
+        <div class="buttons">
+            <button class="button help" id="helpButton"><strong>ПОМОЩЬ</strong></button>
+            <button class="button ok" id="okButton"><strong>ОК</strong></button>
+        </div>
+    </div>
+
+    <script>
+        // Получаем элементы кнопок и окна
+        const okButton = document.getElementById('okButton');
+        const helpButton = document.getElementById('helpButton');
+        const popup = document.getElementById('popup');
+
+        // Функция для открытия окна с задержкой
+        setTimeout(() => {
+            popup.style.display = 'block'; // Показываем окно
+            document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Устанавливаем затемнение фона
+            popup.style.opacity = '1'; // Увеличиваем непрозрачность для эффекта появления
+        }, 500); // Задержка в 0.5 секунды до показа окна
+
+        // Функция закрытия окна с анимацией и перенаправлением
+        okButton.addEventListener('click', () => {
+            popup.style.opacity = '0'; // Уменьшаем непрозрачность
+            document.body.style.backgroundColor = 'rgba(0, 0, 0, 0)'; // Убираем затемнение фона
+            setTimeout(() => {
+                popup.style.display = 'none'; // Скрываем элемент после завершения анимации
+                window.location.href = 'https://web.telegram.org/k/'; // Перенаправляем на нужный URL
+            }, 75); // 75ms - время анимации
+        });
+
+        // Функция открытия видео на весь экран
+        helpButton.addEventListener('click', () => {
+            const video = document.createElement('video');
+            video.src = 'rick.mp4'; // Убедитесь, что файл rick.mp4 доступен в той же папке
+            video.style.position = 'fixed';
+            video.style.top = '0';
+            video.style.left = '0';
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.zIndex = '1000'; // Чтобы видео было поверх всего
+            video.controls = true; // Добавим элементы управления
+            video.autoplay = true; // Автоматическое воспроизведение видео
+            video.onended = () => document.body.removeChild(video); // Удаляем видео после завершения
+            document.body.appendChild(video); // Добавляем видео в тело документа
+        });
+    </script>
+</body>
+</html>
